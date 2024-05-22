@@ -9,7 +9,7 @@ git clone https://github.com/ahobsonsayers/upside ~/docker
 ## Setup with [dockge](https://github.com/louislam/dockge)
 
 ```bash
-docker compose -f dockge/docker-compose.yaml up -d
+docker compose -f dockge/compose.yaml up -d
 ```
 
 ## Why the name **Upside**?
