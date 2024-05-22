@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  dockge:
+    image: louislam/dockge:latest
+    restart: unless-stopped
+    networks:
+      - treafik
+    ports:
+      - 5001:5001
+    volumes:
+      - ~/dockge:/app/data
+      - ~/docker:/opt/stacks
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DOCKGE_STACKS_DIR=/opt/stacks
+
+networks:
+  treafik:
+    external: true
