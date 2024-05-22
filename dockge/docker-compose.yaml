@@ -16,5 +16,5 @@ services:
       - DOCKGE_STACKS_DIR=/opt/stacks
 
 networks:
-  treafik:
+  traefik:
     external: true
