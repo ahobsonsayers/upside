@@ -1,11 +1,9 @@
-version: "3.8"
-
 services:
   dockge:
     image: louislam/dockge:latest
     restart: unless-stopped
     networks:
-      - treafik
+      - traefik
     ports:
       - 5001:5001
     volumes:
