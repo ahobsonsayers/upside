@@ -1,19 +1,21 @@
 services:
-  dockge:
-    image: louislam/dockge:latest
+  sonarr:
+    image: linuxserver/sonarr:latest
     restart: unless-stopped
     networks:
       - traefik
     ports:
-      - 5001:5001
+      - 8989:8989
     volumes:
-      - ~/dockge:/app/data
-      - ~/docker:/opt/stacks
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/sonarr:/config
+      - ~/Seagate/Downloads/TV Shows:/tv
+      - ~/Seagate/Torrents:/downloads
     environment:
-      - HOME=$HOME
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
     labels:
-      - traefik.enable=false
+      - traefik.enable=true
       - traefik.http.routers.sonarr.rule=Host(`tv.arranhs.com`)
       - traefik.http.routers.sonarr.middlewares=sonarr
       - traefik.http.middlewares.sonarr.basicAuth.usersfile=/auth/.sonarrpasswd
@@ -24,4 +26,4 @@ networks:
 
 x-dockge:
   urls:
-    - https://docker.arranhs.com
+    - https://tv.arranhs.com

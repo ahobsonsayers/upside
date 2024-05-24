@@ -1,0 +1,28 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 8096:8096
+    volumes:
+      - ~/jellyfin/config:/config
+      - ~/jellyfin/cache:/cache
+      - ~/Seagate/Downloads:/media:ro
+    user: 1000:1000
+    group_add:
+      - "109"
+    devices:
+      - /dev/dri:/dev/dri
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jellyfin.rule=Host(`media.arranhs.com`)
+
+networks:
+  traefik:
+    external: true
+
+x-dockge:
+  urls:
+    - https://media.arranhs.com

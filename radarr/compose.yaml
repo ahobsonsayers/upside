@@ -1,0 +1,29 @@
+services:
+  radarr:
+    image: linuxserver/radarr:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 7878:7878
+    volumes:
+      - ~/radarr:/config
+      - ~/Seagate/Downloads/Films:/movies
+      - ~/Seagate/Torrents:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.radarr.rule=Host(`films.arranhs.com`)
+      - traefik.http.routers.radarr.middlewares=radarr
+      - traefik.http.middlewares.radarr.basicAuth.usersfile=/auth/.radarrpasswd
+
+networks:
+  traefik:
+    external: true
+
+x-dockge:
+  urls:
+    - https://films.arranhs.com
