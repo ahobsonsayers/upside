@@ -13,10 +13,10 @@ services:
     environment:
       - HOME=$HOME
     labels:
-      - traefik.enable=false
-      - traefik.http.routers.sonarr.rule=Host(`tv.arranhs.com`)
-      - traefik.http.routers.sonarr.middlewares=sonarr
-      - traefik.http.middlewares.sonarr.basicAuth.usersfile=/auth/.sonarrpasswd
+      - traefik.enable=true
+      - traefik.http.routers.dockge.rule=Host(`docker.arranhs.com`)
+      - traefik.http.routers.dockge.middlewares=dockge
+      - traefik.http.middlewares.dockge.basicAuth.usersfile=/auth/.dockgepasswd
 
 networks:
   traefik:

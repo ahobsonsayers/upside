@@ -1,0 +1,19 @@
+services:
+  t4g:
+    image: arranhs/t4g-feed
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 5656:5656
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.sonarr.rule=Host(`t4g.arranhs.com`)
+
+networks:
+  traefik:
+    external: true
+
+x-dockge:
+  urls:
+    - https://t4g.arranhs.com/london
