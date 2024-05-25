@@ -9,10 +9,10 @@ services:
       - 5656:5656
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`t4g.arranhs.com`)
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
 networks:
   traefik:
     external: true
 x-dockge:
   urls:
-    - https://t4g.arranhs.com/london
+    - https://${URL}/london

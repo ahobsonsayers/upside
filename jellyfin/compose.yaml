@@ -1,5 +1,6 @@
 services:
   jellyfin:
+    container_name: ${NAME}
     image: jellyfin/jellyfin:latest
     restart: unless-stopped
     networks:
@@ -17,12 +18,10 @@ services:
       - /dev/dri:/dev/dri
     labels:
       - traefik.enable=true
-      - traefik.http.routers.jellyfin.rule=Host(`media.arranhs.com`)
-
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
 networks:
   traefik:
     external: true
-
 x-dockge:
   urls:
-    - https://media.arranhs.com
+    - https://${URL}

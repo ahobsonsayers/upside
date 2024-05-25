@@ -15,7 +15,7 @@ services:
       - HOME=$HOME
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`docker.arranhs.com`)
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
       - traefik.http.routers.${NAME}.middlewares=${NAME}
       - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
 networks:
@@ -23,4 +23,4 @@ networks:
     external: true
 x-dockge:
   urls:
-    - https://docker.arranhs.com
+    - https://${URL}

@@ -17,12 +17,12 @@ services:
       - TZ=Europe/London
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`films.arranhs.com`)
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
       - traefik.http.routers.${NAME}.middlewares=${NAME}
-      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.radarrpasswd
+      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
 networks:
   traefik:
     external: true
 x-dockge:
   urls:
-    - https://films.arranhs.com
+    - https://${URL}
