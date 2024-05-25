@@ -1,6 +1,7 @@
 services:
   t4g:
-    image: arranhs/t4g-feed
+    container_name: ${NAME}
+    image: arranhs/t4g-feed:develop
     restart: unless-stopped
     networks:
       - traefik
@@ -8,12 +9,10 @@ services:
       - 5656:5656
     labels:
       - traefik.enable=true
-      - traefik.http.routers.sonarr.rule=Host(`t4g.arranhs.com`)
-
+      - traefik.http.routers.${NAME}.rule=Host(`t4g.arranhs.com`)
 networks:
   traefik:
     external: true
-
 x-dockge:
   urls:
     - https://t4g.arranhs.com/london

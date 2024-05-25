@@ -1,5 +1,6 @@
 services:
   sonarr:
+    container_name: ${NAME}
     image: linuxserver/sonarr:latest
     restart: unless-stopped
     networks:
@@ -16,14 +17,12 @@ services:
       - TZ=Europe/London
     labels:
       - traefik.enable=true
-      - traefik.http.routers.sonarr.rule=Host(`tv.arranhs.com`)
-      - traefik.http.routers.sonarr.middlewares=sonarr
-      - traefik.http.middlewares.sonarr.basicAuth.usersfile=/auth/.sonarrpasswd
-
+      - traefik.http.routers.${NAME}.rule=Host(`tv.arranhs.com`)
+      - traefik.http.routers.${NAME}.middlewares=${NAME}
+      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.sonarrpasswd
 networks:
   traefik:
     external: true
-
 x-dockge:
   urls:
     - https://tv.arranhs.com

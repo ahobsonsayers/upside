@@ -1,5 +1,6 @@
 services:
   dockge:
+    container_name: ${NAME}
     image: louislam/dockge:latest
     restart: unless-stopped
     networks:
@@ -14,14 +15,12 @@ services:
       - HOME=$HOME
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dockge.rule=Host(`docker.arranhs.com`)
-      - traefik.http.routers.dockge.middlewares=dockge
-      - traefik.http.middlewares.dockge.basicAuth.usersfile=/auth/.dockgepasswd
-
+      - traefik.http.routers.${NAME}.rule=Host(`docker.arranhs.com`)
+      - traefik.http.routers.${NAME}.middlewares=${NAME}
+      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
 networks:
   traefik:
     external: true
-
 x-dockge:
   urls:
     - https://docker.arranhs.com
