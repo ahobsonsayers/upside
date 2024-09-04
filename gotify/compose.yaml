@@ -1,0 +1,22 @@
+services:
+  gotify:
+    container_name: ${NAME}
+    image: gotify/server:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 4444:80
+    volumes:
+      - ~/gotify:/app/data
+    environment:
+      - TZ=Europe/London
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://${URL}
