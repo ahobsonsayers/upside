@@ -1,0 +1,32 @@
+# Example
+# Create password:
+# htpasswd -c ~/traefik/auth/.examplepasswd arranhs
+services:
+  example:
+    container_name: example
+    image: hello-world:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 80:80
+    volumes:
+      - ~/example:/example
+    environment:
+      - EXAMPLE=example
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    labels:
+      - traefik.enable=false
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.${NAME}.middlewares=${NAME}
+      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
+    env_file: 
+      - .env.secrets
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://${URL}
