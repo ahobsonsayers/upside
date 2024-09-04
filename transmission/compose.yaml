@@ -1,0 +1,50 @@
+# Transmission
+#
+# Create password:
+# htpasswd -c ~/traefik/auth/.transmissionpasswd arranhs
+
+services:
+  transmission:
+    container_name: transmission
+    image: haugene/transmission-openvpn:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - traefik
+    ports:
+      - 9091:9091
+    volumes:
+      - ~/transmission:/transmission
+      - ~/Seagate/Torrents:/downloads
+    environment:
+      - TRANSMISSION_HOME=/transmission
+      - TRANSMISSION_DOWNLOAD_DIR=/downloads/seeding
+      - TRANSMISSION_INCOMPLETE_DIR=/downloads/incomplete
+      - TRANSMISSION_WEB_UI=flood-for-transmission
+      - OPENVPN_PROVIDER=SURFSHARK
+      - OPENVPN_CONFIG=uk-lon-st001.prod.surfshark.com_tcp
+      - LOCAL_NETWORK=192.168.1.0/24
+      - CREATE_TUN_DEVICE=true
+      - WEBPROXY_ENABLED=false
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.${NAME}.middlewares=${NAME}
+      - traefik.http.routers.${NAME}.service=${NAME}
+      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
+      - traefik.http.services.${NAME}.loadbalancer.server.port=9091
+    secrets:
+      - openvpn_creds
+networks:
+  traefik:
+    external: true
+secrets:
+  openvpn_creds:
+    file: .secret
+x-dockge:
+  urls:
+    - https://${URL}
