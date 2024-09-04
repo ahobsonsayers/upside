@@ -1,0 +1,5 @@
+services:
+  twichets:
+    container_name: ${NAME}
+    image: arranhs/twitchets:latest
+    restart: unless-stopped
