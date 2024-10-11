@@ -1,3 +1,9 @@
+########################################################
+# radarr
+#
+# Create password:
+# htpasswd -c ~/traefik/auth/.radarrpasswd arranhs
+########################################################
 services:
   radarr:
     container_name: ${NAME}

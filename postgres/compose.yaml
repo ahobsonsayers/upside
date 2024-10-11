@@ -1,7 +1,10 @@
+########################################################
+# postgres
+########################################################
 services:
   postgres:
     container_name: ${NAME}
-    image: postgres:latest
+    image: postgres:16
     restart: unless-stopped
     ports:
       - 5432:5432

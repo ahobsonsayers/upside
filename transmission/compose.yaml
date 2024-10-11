@@ -1,8 +1,9 @@
-# Transmission
+########################################################
+# transmission
 #
 # Create password:
 # htpasswd -c ~/traefik/auth/.transmissionpasswd arranhs
-
+########################################################
 services:
   transmission:
     container_name: transmission

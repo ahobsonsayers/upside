@@ -1,3 +1,9 @@
+########################################################
+# sonarr
+#
+# Create password:
+# htpasswd -c ~/traefik/auth/.sonarrpasswd arranhs
+########################################################
 services:
   sonarr:
     container_name: ${NAME}

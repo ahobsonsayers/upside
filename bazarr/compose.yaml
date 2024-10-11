@@ -1,24 +1,26 @@
 ########################################################
-# dockge
+# bazarr
 #
 # Create password:
 # htpasswd -c ~/traefik/auth/.bazarrpasswd arranhs
 ########################################################
 services:
-  dockge:
-    container_name: ${NAME}
-    image: louislam/dockge:latest
+  bazarr:
+    container_name: bazarr
+    image: linuxserver/bazarr:latest
     restart: unless-stopped
     networks:
       - traefik
     ports:
-      - 5001:5001
+      - 6767:6767
     volumes:
-      - ~/dockge:/app/data
-      - ~/docker:/opt/stacks
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/bazarr:/config
+      - ~/Seagate/Downloads/Films:/movies
+      - ~/Seagate/Downloads/TV Shows:/tv
     environment:
-      - HOME=$HOME
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
     labels:
       - traefik.enable=true
       - traefik.http.routers.${NAME}.rule=Host(`${URL}`)

@@ -1,0 +1,39 @@
+########################################################
+# ntfy
+#
+# User can be added after start using:
+# - docker -it ntfy /bin/sh
+# - ntfy user add --role=admin <username>
+########################################################
+services:
+  ntfy:
+    container_name: ntfy
+    image: binwiederhier/ntfy:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 3333:80
+    volumes:
+      - ~/ntfy:/etc/ntfy
+      - ~/ntfy/cache:/var/cache/ntfy
+    user: 1000:1000
+    environment:
+      - NTFY_BASE_URL=https://${URL}
+      - NTFY_CACHE_FILE=/etc/ntfy/cache.db
+      - NTFY_AUTH_FILE=/etc/ntfy/auth.db
+      - NTFY_ATTACHMENT_CACHE_DIR=/var/cache/ntfy
+      - NTFY_ENABLE_LOGIN=true
+      - NTFY_AUTH_DEFAULT_ACCESS=deny-all
+      - TZ=Europe/London
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+    command:
+      - serve
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://${URL}

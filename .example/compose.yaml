@@ -1,6 +1,9 @@
-# Example
+########################################################
+# example
+#
 # Create password:
 # htpasswd -c ~/traefik/auth/.examplepasswd arranhs
+########################################################
 services:
   example:
     container_name: example
