@@ -21,7 +21,7 @@ services:
       - traefik.enable=true
       # UI
       - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=${NAME}
+      - traefik.http.routers.${NAME}.service=${NAME}
       - traefik.http.services.${NAME}.loadbalancer.server.port=8080
       # WebDav
       # - traefik.http.routers.${WEBDAV_NAME}.rule='Host(`${WEBDAV_URL}`)'
