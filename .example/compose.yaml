@@ -6,7 +6,7 @@
 ########################################################
 services:
   example:
-    container_name: example
+    container_name: ${NAME}
     image: hello-world:latest
     restart: unless-stopped
     networks:
