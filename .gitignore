@@ -79,5 +79,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-.env.secrets
+*.secret
+*.secrets
+.secret.*
+.secrets.*
 !.example/.env.secrets
