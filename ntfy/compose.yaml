@@ -7,7 +7,7 @@
 ########################################################
 services:
   ntfy:
-    container_name: ntfy
+    container_name: ${NAME}
     image: binwiederhier/ntfy:latest
     restart: unless-stopped
     networks:
