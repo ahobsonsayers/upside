@@ -1,0 +1,25 @@
+######################################
+# filebrowser
+######################################
+services:
+  filebrowser:
+    container_name: ${NAME}
+    image: filebrowser/filebrowser:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 8090:80
+    volumes:
+      - ~:/srv
+      - ~/filebrowser/filebrowser.db:/database.db
+    user: 1000:1000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://${URL}
