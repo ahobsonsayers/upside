@@ -1,0 +1,29 @@
+########################################################
+# jdownloader
+########################################################
+services:
+  jdownloader:
+    container_name: ${NAME}
+    image: jaymoulin/jdownloader:latest
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - 3129:3129
+    volumes:
+      - ~/jdownloader:/opt/JDownloader/app/cfg
+      - ~/Seagate/Torrents/complete:/opt/JDownloader/Downloads
+      - /etc/localtime:/etc/localtime:ro
+    user: 1000:1000
+    environment:
+      - MYJD_DEVICE_NAME=ArranServer
+      - FILE_MYJD_USER=user
+      - FILE_MYJD_PASSWORD=password
+    secrets:
+      - user
+      - password
+networks: {}
+secrets:
+  user:
+    file: .secret.user
+  password:
+    file: .secret.password
