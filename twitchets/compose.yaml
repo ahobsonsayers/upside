@@ -6,3 +6,4 @@ services:
     network_mode: bridge
     volumes:
       - ~/twitchets:/twitchets
+networks: {}
