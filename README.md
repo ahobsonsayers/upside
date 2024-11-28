@@ -1,6 +1,6 @@
 # upside
 
-A repo of docker composer files 🐳
+A repo of docker compose files 🐳
 
 ```bash
 git clone https://github.com/ahobsonsayers/upside ~/docker
