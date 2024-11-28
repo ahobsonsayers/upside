@@ -6,7 +6,7 @@
 ########################################################
 services:
   transmission:
-    container_name: transmission
+    container_name: ${NAME}
     image: haugene/transmission-openvpn:latest
     restart: unless-stopped
     cap_add:
@@ -17,6 +17,7 @@ services:
       - 9091:9091
     volumes:
       - ~/transmission:/transmission
+      - ~/transmission/scripts:/scripts
       - ~/Seagate/Torrents:/downloads
     environment:
       - TRANSMISSION_HOME=/transmission
