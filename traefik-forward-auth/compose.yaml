@@ -1,0 +1,22 @@
+########################################################
+# traefik-forward-auth
+########################################################
+services:
+  traefik-forward-auth:
+    image: thomseddon/traefik-forward-auth:2
+    environment:
+      - INSECURE_COOKIE=FALSE
+    env_file:
+      # Set in .env.secrets:
+      # - SECRET
+      # - PROVIDERS_GOOGLE_CLIENT_ID
+      # - PROVIDERS_GOOGLE_CLIENT_SECRET
+      - .env.secrets
+    labels:
+      - traefik.http.middlewares.traefik-forward-auth.forwardauth.address=http://traefik-forward-auth:4181
+      - traefik.http.middlewares.traefik-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User
+      - traefik.http.services.traefik-forward-auth.loadbalancer.server.port=4181
+
+networks:
+  traefik:
+    external: true

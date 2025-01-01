@@ -1,9 +1,8 @@
 services:
   twichets:
-    container_name: ${NAME}
+    container_name: twitchets
     image: arranhs/twitchets:develop
     restart: unless-stopped
     network_mode: bridge
     volumes:
       - ~/twitchets:/twitchets
-networks: {}

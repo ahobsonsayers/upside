@@ -1,0 +1,8 @@
+services:
+  abs-tract:
+    container_name: abs-tract
+    image: arranhs/abs-tract:develop
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - 5555:5555

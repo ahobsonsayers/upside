@@ -1,30 +1,28 @@
 ########################################################
-# jellystat
+# open-webui
+#
+# Create password:
+# htpasswd -c ~/traefik/auth/.openwebuipasswd arranhs
 ########################################################
 services:
-  jellystat:
+  openwebui:
     container_name: ${NAME}
-    image: cyfershepard/jellystat:latest
+    image: ghcr.io/open-webui/open-webui:main
     restart: unless-stopped
     networks:
-      - postgres
       - traefik
     ports:
-      - 3000:3000
+      - 3030:8080
     volumes:
-      - ~/jellystat:/app/backend/backup-data
+      - ~/open-webui:/app/backend/data
     environment:
-      - POSTGRES_IP=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - JWT_SECRET=49e1a1c8c81b443d90dde1b053040b46
+      - WEBUI_AUTH=False
     labels:
       - traefik.enable=true
       - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.${NAME}.middlewares=${NAME}
+      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
 networks:
-  postgres:
-    external: true
   traefik:
     external: true
 x-dockge:

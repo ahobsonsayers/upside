@@ -1,24 +1,27 @@
 ########################################################
-# bazarr
+# kitchenowl
 #
 # Create password:
-# htpasswd -c ~/traefik/auth/.lobechatpasswd arranhs
+# htpasswd -c ~/traefik/auth/.kitchenowlpasswd arranhs
 ########################################################
 services:
-  lobe-chat:
+  kitchenowl:
     container_name: ${NAME}
-    image: lobehub/lobe-chat:latest
+    image: tombursch/kitchenowl:latest
     restart: unless-stopped
     networks:
       - traefik
     ports:
-      - 3210:3210
-    volumes: []
+      - 2323:8080
+    volumes:
+      - ~/kitchenowl:/data
     labels:
-      - traefik.enable=true
+      - traefik.enable=false
       - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
       - traefik.http.routers.${NAME}.middlewares=${NAME}
       - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
+    env_file:
+      - .env.secrets
 networks:
   traefik:
     external: true

@@ -1,30 +1,30 @@
 ########################################################
-# jellystat
+# litellm
 ########################################################
 services:
-  jellystat:
+  litellm:
     container_name: ${NAME}
-    image: cyfershepard/jellystat:latest
+    image: ghcr.io/berriai/litellm:main-stable
     restart: unless-stopped
     networks:
-      - postgres
       - traefik
     ports:
-      - 3000:3000
+      - 4000:4000
     volumes:
-      - ~/jellystat:/app/backend/backup-data
+      - ~/litellm/config.yaml:/app/config.yaml
     environment:
-      - POSTGRES_IP=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - JWT_SECRET=49e1a1c8c81b443d90dde1b053040b46
+    env_file:
+      # Set in .env.secrets:
+      # - LITELLM_MASTER_KEY
+      # - LITELLM_SALT_KEY
+      - .env.secrets
     labels:
       - traefik.enable=true
       - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+    command:
+      - --config=/app/config.yaml
+
 networks:
-  postgres:
-    external: true
   traefik:
     external: true
 x-dockge:
