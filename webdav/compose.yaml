@@ -14,7 +14,7 @@ services:
     ports:
       - 8888:80
     volumes:
-      - ~/test:/files:ro
+      - ~:/files
     user: 1000:1000
     environment:
       - TZ=Europe/London
@@ -24,7 +24,7 @@ services:
       - traefik.http.routers.${NAME}.middlewares=${NAME}
       - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
     command: >
-      serve webdav /files --addr 0.0.0.0:8080
+      serve webdav /files --addr 0.0.0.0:80
 networks:
   traefik:
     external: true
