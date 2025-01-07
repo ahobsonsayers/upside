@@ -3,9 +3,20 @@
 ########################################################
 services:
   traefik-forward-auth:
+    container_name: ${NAME}
     image: thomseddon/traefik-forward-auth:2
+    networks:
+      - traefik
+    ports:
+      - 4181:4181
     environment:
-      - INSECURE_COOKIE=FALSE
+      - WHITELIST=ahobsonsayers@gmail.com
+      - COOKIE_DOMAIN=arranhs.com
+      - AUTH_HOST=${URL}
+      - DEFAULT_PROVIDER=google
+      - INSECURE_COOKIE=false
+      - LOG_LEVEL=debug
+      - LOG_FORMAT=pretty
     env_file:
       # Set in .env.secrets:
       # - SECRET
@@ -13,10 +24,14 @@ services:
       # - PROVIDERS_GOOGLE_CLIENT_SECRET
       - .env.secrets
     labels:
-      - traefik.http.middlewares.traefik-forward-auth.forwardauth.address=http://traefik-forward-auth:4181
-      - traefik.http.middlewares.traefik-forward-auth.forwardauth.authResponseHeaders=X-Forwarded-User
-      - traefik.http.services.traefik-forward-auth.loadbalancer.server.port=4181
-
+      - traefik.enable=true
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.${NAME}.middlewares=oauth
+      - traefik.http.middlewares.oauth.forwardauth.address=http://traefik-forward-auth:4181
+      - traefik.http.middlewares.oauth.forwardauth.authResponseHeaders=X-Forwarded-User
 networks:
   traefik:
     external: true
+x-dockge:
+  urls:
+    - https://${URL}
