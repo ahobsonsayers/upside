@@ -18,9 +18,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=${NAME}
-      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
-      - traefik.http.middlewares.${NAME}.basicauth.removeheader=true
+      - traefik.http.routers.${NAME}.middlewares=oauth
 networks:
   traefik:
     external: true
