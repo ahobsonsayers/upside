@@ -12,7 +12,6 @@ services:
       - 4000:4000
     volumes:
       - ~/litellm/config.yaml:/app/config.yaml
-    environment:
     env_file:
       # Set in .env.secrets:
       # - LITELLM_MASTER_KEY
@@ -23,7 +22,6 @@ services:
       - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
     command:
       - --config=/app/config.yaml
-
 networks:
   traefik:
     external: true
