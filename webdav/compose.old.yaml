@@ -1,0 +1,41 @@
+########################################################
+# webdav
+#
+# Create password:
+# htpasswd -c ~/traefik/auth/.webdavpasswd arranhs
+########################################################
+services:
+  webdav:
+    container_name: webdav
+    image: bytemark/webdav:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 8888:80
+    volumes:
+      - ~:/var/lib/dav/data
+    environment:
+      - SERVER_NAMES=webdav.arranhs.duckdns.org
+      - ANONYMOUS_METHODS=ALL
+      - USERID=1000
+      - GROUPID=1000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.${NAME}.middlewares=${NAME}
+      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
+    entrypoint: [bash]
+    command: >
+      -c '
+      apk --no-cache add shadow &&
+      usermod -u $USERID www-data &&
+      groupmod -g $GROUPID www-data && 
+      docker-entrypoint.sh httpd-foreground
+      '
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://${URL}
