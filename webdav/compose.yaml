@@ -6,7 +6,7 @@
 ########################################################
 services:
   webdav:
-    container_name: webdav
+    container_name: ${NAME}
     image: rclone/rclone:latest
     restart: unless-stopped
     networks:
