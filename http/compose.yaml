@@ -1,0 +1,15 @@
+services:
+  http:
+    container_name: ${NAME}
+    image: rclone/rclone:latest
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - 8899:80
+    volumes:
+      - ~:/files:ro
+    user: 1000:1000
+    environment:
+      - TZ=Europe/London
+    command: >
+      serve http /files --addr 0.0.0.0:80 --read-only
