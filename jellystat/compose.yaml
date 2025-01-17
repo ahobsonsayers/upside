@@ -1,27 +1,27 @@
-########################################################
-# jellystat
-########################################################
 services:
   jellystat:
-    container_name: ${NAME}
+    container_name: $NAME
     image: cyfershepard/jellystat:latest
     restart: unless-stopped
     networks:
       - postgres
       - traefik
     ports:
-      - 3000:3000
+      - 3434:3000
     volumes:
       - ~/jellystat:/app/backend/backup-data
+    env_file:
+      # Set in .env.secrets:
+      # - JWT_SECRET
+      - .env.secrets
     environment:
       - POSTGRES_IP=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - JWT_SECRET=49e1a1c8c81b443d90dde1b053040b46
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
 networks:
   postgres:
     external: true
