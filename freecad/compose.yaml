@@ -21,6 +21,3 @@ services:
 networks:
   traefik:
     external: true
-x-dockge:
-  urls:
-    - https://$URL

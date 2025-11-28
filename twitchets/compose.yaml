@@ -1,6 +1,6 @@
 services:
   twitchets:
-    container_name: twitchets
+    container_name: $NAME
     image: arranhs/twitchets:develop
     restart: unless-stopped
     network_mode: bridge

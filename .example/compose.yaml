@@ -6,7 +6,7 @@
 ########################################################
 services:
   example:
-    container_name: ${NAME}
+    container_name: $NAME
     image: hello-world:latest
     restart: unless-stopped
     networks:
@@ -22,14 +22,11 @@ services:
       - TZ=Europe/London
     labels:
       - traefik.enable=false
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=${NAME}
-      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=$NAME
+      - traefik.http.middlewares.$NAME.basicAuth.usersfile=/auth/.$NAMEpasswd
     env_file: 
       - .env.secrets
 networks:
   traefik:
     external: true
-x-dockge:
-  urls:
-    - https://${URL}

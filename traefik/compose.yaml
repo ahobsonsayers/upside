@@ -5,7 +5,7 @@
 ########################################################
 services:
   traefik:
-    container_name: traefik
+    container_name: $NAME
     image: traefik:latest
     restart: unless-stopped
     depends_on:

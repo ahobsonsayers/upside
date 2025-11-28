@@ -1,6 +1,6 @@
 services:
   librechat:
-    container_name: librechat
+    container_name: $NAME
     image: ghcr.io/danny-avila/librechat-dev:latest
     restart: unless-stopped
     depends_on:

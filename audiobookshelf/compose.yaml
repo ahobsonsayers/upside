@@ -43,6 +43,3 @@ networks:
   traefik:
     external: true
 
-x-dockge:
-  urls:
-    - http://$URL

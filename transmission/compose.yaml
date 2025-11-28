@@ -49,6 +49,3 @@ networks:
 secrets:
   openvpn_creds:
     file: .secret
-x-dockge:
-  urls:
-    - https://$URL

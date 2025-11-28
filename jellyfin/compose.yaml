@@ -1,6 +1,6 @@
 services:
   jellyfin:
-    container_name: jellyfin
+    container_name: $NAME
     image: jellyfin/jellyfin:latest
     restart: unless-stopped
     networks:
@@ -43,6 +43,3 @@ networks:
     external: true
   meilisearch:
     external: true
-x-dockge:
-  urls:
-    - https://$URL

@@ -32,6 +32,3 @@ networks:
     external: true
   traefik:
     external: true
-x-dockge:
-  urls:
-    - https://$URL

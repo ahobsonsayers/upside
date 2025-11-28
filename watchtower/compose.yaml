@@ -1,6 +1,6 @@
 services:
   watchtower:
-    container_name: watchtower
+    container_name: $NAME
     image: containrrr/watchtower
     restart: unless-stopped
     network_mode: bridge

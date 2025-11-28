@@ -47,7 +47,7 @@ services:
       - INTERNAL_URL=https://backend:8080
     labels:
       - traefik.enable=true
-      - traefik.http.routers.onyx.rule=Host($URL)
+      - traefik.http.routers.onyx.rule=Host(`$URL`)
     depends_on:
       - backend
   minio:
