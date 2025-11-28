@@ -1,6 +1,6 @@
 services:
   jdownloader:
-    container_name: ${NAME}
+    container_name: $NAME
     image: jaymoulin/jdownloader:latest
     restart: unless-stopped
     network_mode: bridge

@@ -1,6 +1,6 @@
 services:
   http:
-    container_name: ${NAME}
+    container_name: $NAME
     image: rclone/rclone:latest
     restart: unless-stopped
     network_mode: bridge

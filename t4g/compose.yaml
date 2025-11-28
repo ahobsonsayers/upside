@@ -1,6 +1,6 @@
 services:
   t4g:
-    container_name: ${NAME}
+    container_name: $NAME
     image: arranhs/t4g-feed:develop
     restart: unless-stopped
     networks:
@@ -9,8 +9,8 @@ services:
       - 5656:5656
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=remove-trailing-slash
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=remove-trailing-slash
       - traefik.http.middlewares.remove-trailing-slash.redirectRegex.regex=^(.*)/$
       - traefik.http.middlewares.remove-trailing-slash.redirectRegex.replacement=$1
 networks:
@@ -18,4 +18,4 @@ networks:
     external: true
 x-dockge:
   urls:
-    - https://${URL}/london
+    - https://$URL/london

@@ -1,6 +1,6 @@
 services:
   vigilant:
-    container_name: ${NAME}
+    container_name: $NAME
     image: ghcr.io/verifiedjoseph/vigilant:latest
     restart: unless-stopped
     network_mode: bridge

@@ -6,7 +6,7 @@
 ########################################################
 services:
   transmission:
-    container_name: ${NAME}
+    container_name: $NAME
     image: haugene/transmission-openvpn:latest
     restart: unless-stopped
     cap_add:
@@ -36,11 +36,11 @@ services:
       - TZ=Europe/London
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=${NAME}
-      - traefik.http.routers.${NAME}.service=${NAME}
-      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
-      - traefik.http.services.${NAME}.loadbalancer.server.port=9091
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=$NAME
+      - traefik.http.routers.$NAME.service=$NAME
+      - traefik.http.middlewares.$NAME.basicAuth.usersfile=/auth/.$NAMEpasswd
+      - traefik.http.services.$NAME.loadbalancer.server.port=9091
     secrets:
       - openvpn_creds
 networks:
@@ -51,4 +51,4 @@ secrets:
     file: .secret
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

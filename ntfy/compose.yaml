@@ -7,7 +7,7 @@
 ########################################################
 services:
   ntfy:
-    container_name: ${NAME}
+    container_name: $NAME
     image: binwiederhier/ntfy:latest
     restart: unless-stopped
     networks:
@@ -19,7 +19,7 @@ services:
       - ~/ntfy/cache:/var/cache/ntfy
     user: 1000:1000
     environment:
-      - NTFY_BASE_URL=https://${URL}
+      - NTFY_BASE_URL=https://$URL
       - NTFY_CACHE_FILE=/etc/ntfy/cache.db
       - NTFY_AUTH_FILE=/etc/ntfy/auth.db
       - NTFY_ATTACHMENT_CACHE_DIR=/var/cache/ntfy
@@ -28,7 +28,7 @@ services:
       - TZ=Europe/London
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
     command:
       - serve
 networks:
@@ -36,4 +36,4 @@ networks:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

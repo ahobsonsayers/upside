@@ -1,6 +1,6 @@
 services:
   kitchenowl:
-    container_name: ${NAME}
+    container_name: $NAME
     image: tombursch/kitchenowl:latest
     restart: unless-stopped
     networks:

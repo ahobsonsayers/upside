@@ -1,6 +1,6 @@
 services:
   jellyseerr:
-    container_name: ${NAME}
+    container_name: $NAME
     image: fallenbagel/jellyseerr:latest
     restart: unless-stopped
     networks:
@@ -14,10 +14,10 @@ services:
       - TZ=Europe/London
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
 networks:
   traefik:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

@@ -6,7 +6,7 @@
 ########################################################
 services:
   webdav:
-    container_name: ${NAME}
+    container_name: $NAME
     image: bytemark/webdav:latest
     restart: unless-stopped
     networks:
@@ -19,9 +19,9 @@ services:
       - ANONYMOUS_METHODS=ALL
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=${NAME}
-      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=$NAME
+      - traefik.http.middlewares.$NAME.basicAuth.usersfile=/auth/.$NAMEpasswd
     entrypoint:
       - bash
     command: |
@@ -36,4 +36,4 @@ networks:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

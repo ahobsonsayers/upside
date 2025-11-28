@@ -3,7 +3,7 @@
 ########################################################
 services:
   sftpgo:
-    container_name: ${NAME}
+    container_name: $NAME
     image: drakkan/sftpgo:latest
     restart: unless-stopped
     networks:
@@ -19,9 +19,9 @@ services:
       - SFTPGO_WEBDAVD__BINDINGS__0__PORT=10080
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.service=${NAME}
-      - traefik.http.services.${NAME}.loadbalancer.server.port=8080
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.service=$NAME
+      - traefik.http.services.$NAME.loadbalancer.server.port=8080
       # WebDav
       # - traefik.http.routers.${WEBDAV_NAME}.rule='Host(`${WEBDAV_URL}`)'
       # - traefik.http.routers.${WEBDAV_NAME}.service=${WEBDAV_NAME} \
@@ -31,4 +31,4 @@ networks:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL
