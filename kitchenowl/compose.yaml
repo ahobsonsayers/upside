@@ -1,9 +1,3 @@
-########################################################
-# kitchenowl
-#
-# Create password:
-# htpasswd -c ~/traefik/auth/.kitchenowlpasswd arranhs
-########################################################
 services:
   kitchenowl:
     container_name: ${NAME}
@@ -16,10 +10,9 @@ services:
     volumes:
       - ~/kitchenowl:/data
     labels:
-      - traefik.enable=false
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=${NAME}
-      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=oauth
     env_file:
       - .env.secrets
 networks:
@@ -27,4 +20,4 @@ networks:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

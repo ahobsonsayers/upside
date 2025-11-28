@@ -1,0 +1,79 @@
+services:
+  backend:
+    container_name: onyx-backend
+    image: onyxdotapp/onyx-backend:latest
+    restart: unless-stopped
+    networks:
+      - onyx
+      - postgres
+    environment:
+      # Postgres
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=onyx
+      # Auth
+      - AUTH_TYPE=google_oauth
+      - AUTH_COOKIE_EXPIRE_TIME_SECONDS=604800 # 1 week
+      - SESSION_EXPIRE_TIME_SECONDS=604800 # 1 week
+      - DISABLE_GENERATIVE_AI=true
+      # File Storage (MinIO)
+      - S3_ENDPOINT_URL=http://minio:9000
+      - S3_AWS_ACCESS_KEY_ID=minioadmin
+      - S3_AWS_SECRET_ACCESS_KEY=minioadmin
+      - S3_FILE_STORE_BUCKET_NAME=onyx
+      - S3_VERIFY_SSL=false
+      # Redis
+      - REDIS_HOST=redis
+    env_file:
+      # Env vars in .env.secrets:
+      # - GOOGLE_OAUTH_CLIENT_ID
+      # - GOOGLE_OAUTH_CLIENT_SECRET
+      - .env.secrets
+    depends_on:
+      - minio
+      - redis
+  frontend:
+    container_name: onyx-frontend
+    image: onyxdotapp/onyx-web-server:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+      - onyx
+    ports:
+      - 5353:3000
+    environment:
+      - INTERNAL_URL=https://backend:8080
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.onyx.rule=Host($URL)
+    depends_on:
+      - backend
+  minio:
+    container_name: onyx-minio
+    image: minio/minio:latest
+    restart: unless-stopped
+    networks:
+      - onyx
+    volumes:
+      - ~/onyx/minio:/data
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    command: server /data --console-address ":9001"
+  redis:
+    container_name: onyx-redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - onyx
+    volumes:
+      - ~/onyx/redis:/data
+networks:
+  onyx:
+    driver: bridge
+  postgres:
+    external: true
+  traefik:
+    external: true

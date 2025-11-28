@@ -1,0 +1,15 @@
+services:
+  meilisearch:
+    container_name: meilisearch
+    image: getmeili/meilisearch:v1.9
+    restart: unless-stopped
+    networks:
+      - meilisearch
+    volumes:
+      - ~/meilisearch:/meili_data
+    environment:
+      - MEILI_MASTER_KEY=1234
+networks:
+  meilisearch:
+    name: meilisearch
+    driver: bridge

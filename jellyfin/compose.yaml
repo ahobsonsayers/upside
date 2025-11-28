@@ -1,9 +1,6 @@
-########################################################
-# jellyfin
-########################################################
 services:
   jellyfin:
-    container_name: ${NAME}
+    container_name: jellyfin
     image: jellyfin/jellyfin:latest
     restart: unless-stopped
     networks:
@@ -14,17 +11,38 @@ services:
       - ~/jellyfin/config:/config
       - ~/jellyfin/cache:/cache
       - ~/Seagate/Downloads:/media:ro
+    devices:
+      - /dev/dri
     user: 1000:1000
     group_add:
       - "109"
-    devices:
-      - /dev/dri:/dev/dri
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.jellyfin.rule=Host(`$URL`)
+  jellysearch:
+    container_name: jellysearch
+    image: domistyle/jellysearch:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+      - meilisearch
+    ports:
+      - 5000:5000
+    volumes:
+      - ~/jellyfin/config:/config:ro
+    environment:
+      - INDEX_CRON=0 0 0/2 ? * * *
+      - MEILI_MASTER_KEY=1234
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jellysearch.rule=Host(`$URL`) &&
+        (QueryRegexp(`searchTerm`, `(.*?)`) || QueryRegexp(`SearchTerm`,
+        `(.*?)`)) 
 networks:
   traefik:
     external: true
+  meilisearch:
+    external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

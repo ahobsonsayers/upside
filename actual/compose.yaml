@@ -1,0 +1,18 @@
+services:
+  actual:
+    container_name: $NAME
+    image: actualbudget/actual-server:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 5006:5006
+    volumes:
+     - ~/actual:/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=oauth
+networks:
+  traefik:
+    external: true

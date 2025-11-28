@@ -1,0 +1,25 @@
+services:
+  jackett:
+    container_name: $NAME
+    image: linuxserver/jackett:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 9117:9117
+    volumes:
+      - ~/jackett:/config
+      - ~/blackhole:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=oauth
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+networks:
+  traefik:
+    external: true

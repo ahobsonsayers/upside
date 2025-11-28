@@ -1,0 +1,24 @@
+services:
+  stirling:
+    container_name: ${NAME}
+    image: frooodle/s-pdf:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 8484:8080
+    volumes:
+      - ~/stirling:/configs
+    environment:
+      - DOCKER_ENABLE_SECURITY=true
+      - SECURITY_ENABLE_LOGIN=true
+    labels:
+      - traefik.enable=false
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.${NAME}.middlewares=${NAME}
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://${URL}

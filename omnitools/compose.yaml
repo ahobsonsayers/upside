@@ -1,0 +1,19 @@
+services:
+  omnitools:
+    container_name: $NAME
+    image: iib0011/omni-tools:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 7272:80
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=oauth
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://$URL

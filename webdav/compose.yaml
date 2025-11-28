@@ -7,24 +7,30 @@
 services:
   webdav:
     container_name: ${NAME}
-    image: rclone/rclone:latest
+    image: bytemark/webdav:latest
     restart: unless-stopped
     networks:
       - traefik
     ports:
       - 8888:80
     volumes:
-      - ~:/files
-    user: 1000:1000
+      - ~:/var/lib/dav/data
     environment:
-      - TZ=Europe/London
+      - ANONYMOUS_METHODS=ALL
     labels:
       - traefik.enable=true
       - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
       - traefik.http.routers.${NAME}.middlewares=${NAME}
       - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
-    command: >
-      serve webdav /files --addr 0.0.0.0:80
+    entrypoint:
+      - bash
+    command: |
+      -c '
+        apk --no-cache add shadow &&
+        usermod -u 1000 www-data &&
+        groupmod -g 1000 www-data &&
+        docker-entrypoint.sh httpd-foreground
+      '
 networks:
   traefik:
     external: true

@@ -10,6 +10,9 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.${NAME}.middlewares=remove-trailing-slash
+      - traefik.http.middlewares.remove-trailing-slash.redirectRegex.regex=^(.*)/$
+      - traefik.http.middlewares.remove-trailing-slash.redirectRegex.replacement=$1
 networks:
   traefik:
     external: true

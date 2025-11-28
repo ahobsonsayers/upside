@@ -1,0 +1,37 @@
+services:
+  beszel:
+    container_name: beszel
+    image: henrygd/beszel:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 8899:8090
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - ~/beszel:/beszel_data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=oauth
+  beszel-agent:
+    container_name: beszel-agent
+    image: henrygd/beszel-agent:latest
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ~/Seagate:/extra-filesystems/Seagate:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    env_file:
+      # Set in .env.secrets:
+      # - KEY
+      - .env.secrets
+    environment:
+      PORT: 45876
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://$URL

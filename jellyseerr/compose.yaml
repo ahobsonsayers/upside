@@ -1,0 +1,23 @@
+services:
+  jellyseerr:
+    container_name: ${NAME}
+    image: fallenbagel/jellyseerr:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 5055:5055
+    volumes:
+      - ~/jellyseerr:/app/config
+    environment:
+      - LOG_LEVEL=info
+      - TZ=Europe/London
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://${URL}

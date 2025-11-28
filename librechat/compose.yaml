@@ -1,0 +1,65 @@
+services:
+  librechat:
+    container_name: librechat
+    image: ghcr.io/danny-avila/librechat-dev:latest
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    networks:
+      - traefik
+      - mongo
+      - meilisearch
+    ports:
+      - 3080:3080
+    volumes:
+      - ~/docker/librechat/librechat.yaml:/app/librechat.yaml:ro
+      - ~/librechat/images:/app/client/public/images
+      - ~/librechat/logs:/app/api/logs
+    user: 1000:1000
+    env_file:
+      # Set in .env.secrets:
+      # - JWT_SECRET
+      # - JWT_REFRESH_SECRET 
+      # - GOOGLE_CLIENT_ID
+      # - GOOGLE_CLIENT_SECRET
+      # - LITELLM_API_KEY 
+      - .env.secrets
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3080
+      - DOMAIN_CLIENT=https://$URL
+      - DOMAIN_SERVER=https://$URL
+      - MONGO_URI=mongodb://mongo:27017/librechat
+      - NO_INDEX=true
+      - SEARCH=true
+      - MEILI_HOST=http://meilisearch:7700
+      - MEILI_MASTER_KEY=1234
+      - MEILI_NO_ANALYTICS=true
+      - ALLOW_EMAIL_LOGIN=false
+      - ALLOW_REGISTRATION=false
+      - ALLOW_UNVERIFIED_EMAIL_LOGIN=false
+      - ALLOW_SOCIAL_LOGIN=true
+      - ALLOW_SOCIAL_REGISTRATION=false
+      - GOOGLE_CALLBACK_URL=/oauth/google/callback
+      - CREDS_KEY=
+      - CREDS_IV=
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: unless-stopped
+    networks:
+      - mongo
+    volumes:
+      - ~/mongodb:/data/db
+    command: mongod --noauth
+networks:
+  mongo:
+    name: mongo
+    driver: bridge
+  traefik:
+    external: true
+  meilisearch:
+    external: true

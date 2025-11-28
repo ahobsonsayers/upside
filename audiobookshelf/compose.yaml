@@ -1,0 +1,48 @@
+services:
+  audiobookshelf:
+    container_name: audiobookshelf
+    image: advplyr/audiobookshelf:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 13378:80
+    volumes:
+      - ~/Seagate/Downloads/Audiobooks:/audiobooks
+      - ~/Seagate/Downloads/Ebooks:/ebooks
+      - ~/audiobookshelf/config:/config
+      - ~/audiobookshelf/metadata:/metadata
+    environment:
+      - AUDIOBOOKSHELF_UID=1000
+      - AUDIOBOOKSHELF_GID=1000
+    labels:
+      - traefik.enable=true
+
+      # Router for books.arranhs.com (direct root)
+      - traefik.http.routers.audiobookshelf.rule=Host(`books.arranhs.com`)
+
+      # Router for audiobooks.arranhs.com redirecting to full path under books
+      - traefik.http.routers.audiobookshelf-audiobooks.rule=Host(`audiobooks.arranhs.com`)
+      # - traefik.http.routers.audiobookshelf-audiobooks.middlewares=audiobooks-redirect
+
+      # Router for ebooks.arranhs.com redirecting to full path under books
+      - traefik.http.routers.audiobookshelf-ebooks.rule=Host(`ebooks.arranhs.com`)
+      - traefik.http.routers.audiobookshelf-ebooks.middlewares=ebooks-redirect
+
+      # Middleware redirect for audiobooks with full path prefix
+      # - traefik.http.middlewares.audiobooks-redirect.redirectregex.regex=^https?://audiobooks\.arranhs\.com/(.*)
+      # - traefik.http.middlewares.audiobooks-redirect.redirectregex.replacement=https://books.arranhs.com/audiobookshelf/library/audiobooks/$${1}
+      # - traefik.http.middlewares.audiobooks-redirect.redirectregex.permanent=true
+
+      # Middleware redirect for ebooks with full path prefix
+      - traefik.http.middlewares.ebooks-redirect.redirectregex.regex=^https?://ebooks\.arranhs\.com/(.*)
+      - traefik.http.middlewares.ebooks-redirect.redirectregex.replacement=https://books.arranhs.com/audiobookshelf/library/ebooks/$${1}
+      - traefik.http.middlewares.ebooks-redirect.redirectregex.permanent=true
+
+networks:
+  traefik:
+    external: true
+
+x-dockge:
+  urls:
+    - http://$URL

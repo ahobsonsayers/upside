@@ -1,0 +1,54 @@
+########################################################
+# traefik
+# Create password:
+# htpasswd -c ~/traefik/auth/.traefikpasswd arranhs
+########################################################
+services:
+  traefik:
+    container_name: traefik
+    image: traefik:latest
+    restart: unless-stopped
+    depends_on:
+      oauth:
+        condition: service_started
+    networks:
+      - traefik
+    ports:
+      - 8080:8080
+      - 80:80
+      - 443:443
+    volumes:
+      - ~/traefik/traefik.yaml:/traefik.yaml
+      - ~/traefik/dynamic.yaml:/dynamic.yaml
+      - ~/traefik/acme.json:/acme.json
+      - ~/traefik/auth:/auth
+      - /var/run/docker.sock:/var/run/docker.sock
+  oauth:
+    container_name: oauth
+    image: thomseddon/traefik-forward-auth:2
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 4181:4181
+    environment:
+      - WHITELIST=ahobsonsayers@gmail.com
+      - AUTH_HOST=$AUTH_URL
+      - DEFAULT_PROVIDER=google
+      - LIFETIME=604800
+      - COOKIE_DOMAIN=arranhs.com
+      - INSECURE_COOKIE=false
+      - LOG_LEVEL=debug
+      - LOG_FORMAT=pretty
+    env_file:
+      - .env.secrets
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.oauth.rule=Host(`$AUTH_URL`)
+      - traefik.http.routers.oauth.middlewares=oauth
+      - traefik.http.middlewares.oauth.forwardauth.address=http://oauth:4181
+      - traefik.http.middlewares.oauth.forwardauth.authResponseHeaders=X-Forwarded-User
+networks:
+  traefik:
+    name: traefik
+    driver: bridge

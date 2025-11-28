@@ -22,6 +22,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=oauth
 networks:
   postgres:
     external: true

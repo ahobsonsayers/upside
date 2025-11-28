@@ -1,12 +1,6 @@
-########################################################
-# dockge
-#
-# Create password:
-# htpasswd -c ~/traefik/auth/.bazarrpasswd arranhs
-########################################################
 services:
   dockge:
-    container_name: ${NAME}
+    container_name: $NAME
     image: louislam/dockge:latest
     restart: unless-stopped
     networks:
@@ -21,12 +15,11 @@ services:
       - HOME=$HOME
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=${NAME}
-      - traefik.http.middlewares.${NAME}.basicAuth.usersfile=/auth/.${NAME}passwd
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=oauth
 networks:
   traefik:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

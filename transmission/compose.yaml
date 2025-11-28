@@ -19,6 +19,8 @@ services:
       - ~/transmission:/transmission
       - ~/transmission/scripts:/scripts
       - ~/Seagate/Torrents:/downloads
+    devices:
+      - /dev/net/tun
     environment:
       - TRANSMISSION_HOME=/transmission
       - TRANSMISSION_DOWNLOAD_DIR=/downloads/seeding

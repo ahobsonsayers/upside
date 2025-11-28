@@ -1,0 +1,24 @@
+services:
+  pgadmin:
+    container_name: $NAME
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+      - postgres
+    ports:
+      - 5050:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=oauth
+networks:
+  traefik:
+    external: true
+  postgres:
+    external: true

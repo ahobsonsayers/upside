@@ -1,0 +1,15 @@
+services:
+  namecheap:
+    container_name: namecheap
+    image: joshuamorris3/namecheap-ddns-update:latest
+    restart: unless-stopped
+    network_mode: bridge
+    env_file:
+      # Set in .env.secrets:
+      # - NC_DDNS_PASS
+      - .env.secrets
+    environment:
+      - DOMAIN=arranhs.com
+      - SUBDOMAINS=@,*
+      - INTERVAL=60s
+networks: {}

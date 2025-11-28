@@ -1,0 +1,35 @@
+services:
+  tandoor:
+    container_name: $NAME
+    image: vabene1111/recipes
+    restart: unless-stopped
+    networks:
+      - traefik
+      - postgres
+    ports:
+      - 6543:80
+    volumes:
+      - ~/tandoor/staticfiles:/opt/recipes/staticfiles
+      - ~/tandoor/mediafiles:/opt/recipes/mediafiles
+    env_file:
+      # Set in .env.secrets:
+      # - SECRET_KEY
+      - .env.secrets
+    environment:
+      - DB_ENGINE=django.db.backends.postgresql
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=tandoor
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+networks:
+  traefik:
+    external: true
+  postgres:
+    external: true
+x-dockge:
+  urls:
+    - https://$URL

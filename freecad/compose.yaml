@@ -1,0 +1,26 @@
+services:
+  freecad:
+    container_name: ${NAME}
+    image: lscr.io/linuxserver/freecad:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    ports:
+      - 3000:3000
+    volumes:
+      - ~/freecad:/config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=$NAME
+      - traefik.http.middlewares.$NAME.basicAuth.usersfile=/auth/.${NAME}passwd
+networks:
+  traefik:
+    external: true
+x-dockge:
+  urls:
+    - https://$URL

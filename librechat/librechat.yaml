@@ -1,0 +1,29 @@
+version: 1.0.8
+ 
+cache: true
+ 
+interface:
+  privacyPolicy:
+    externalUrl: x
+  termsOfService:
+    externalUrl: ""
+    
+registration:
+  socialLogins: 
+    - google
+ 
+endpoints:
+  custom:
+    - name: "LiteLLM"
+      modelDisplayLabel: "LiteLLM"
+      baseURL: "http://litellm:4000"
+      apiKey: "${LITELLM_API_KEY}"
+      models:
+        default: ["Llama-3.3-70B"]
+        fetch: true
+      addParams:
+        temperature: 0.7
+      titleConvo: true
+      titleModel: PollinationsAILlama
+      
+ 

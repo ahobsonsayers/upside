@@ -1,9 +1,6 @@
-########################################################
-# litellm
-########################################################
 services:
   litellm:
-    container_name: ${NAME}
+    container_name: $NAME
     image: ghcr.io/berriai/litellm:main-stable
     restart: unless-stopped
     networks:
@@ -11,15 +8,20 @@ services:
     ports:
       - 4000:4000
     volumes:
-      - ~/litellm/config.yaml:/app/config.yaml
+      - ~/litellm/config.yaml:/app/config.yaml:ro
     env_file:
       # Set in .env.secrets:
       # - LITELLM_MASTER_KEY
       # - LITELLM_SALT_KEY
+      # - CEREBRAS_API_KEY
+      # - GROQ_API_KEY
+      # - HUGGINGFACE_API_KEY
+      # - OPENROUTER_API_KEY
+      # - TOGETHER_AI_API_KEY
       - .env.secrets
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
     command:
       - --config=/app/config.yaml
 networks:
@@ -27,4 +29,4 @@ networks:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

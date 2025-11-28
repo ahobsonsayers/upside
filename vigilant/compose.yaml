@@ -1,0 +1,19 @@
+services:
+  vigilant:
+    container_name: ${NAME}
+    image: ghcr.io/verifiedjoseph/vigilant:latest
+    restart: unless-stopped
+    network_mode: bridge
+    volumes:
+      - ~/docker/vigilant/feeds.yaml:/app/feeds.yaml:ro
+    env_file:
+      # Set in .env.secrets:
+      # - VIGILANT_NOTIFICATION_NTFY_USERNAME
+      # - VIGILANT_NOTIFICATION_NTFY_PASSWORD 
+      - .env.secrets
+    environment:
+      - VIGILANT_NOTIFICATION_SERVICE=ntfy
+      - VIGILANT_NOTIFICATION_NTFY_URL=https://notifications.arranhs.com
+      - VIGILANT_NOTIFICATION_NTFY_TOPIC=none
+      - VIGILANT_NOTIFICATION_NTFY_AUTH=password
+networks: {}

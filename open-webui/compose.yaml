@@ -1,6 +1,6 @@
 services:
   openwebui:
-    container_name: ${NAME}
+    container_name: $NAME
     image: ghcr.io/open-webui/open-webui:main
     restart: unless-stopped
     networks:
@@ -10,19 +10,47 @@ services:
     volumes:
       - ~/open-webui:/app/backend/data
     environment:
+      - WEBUI_URL=https://$URL
       - OPENAI_API_BASE_URL=https://llm.arranhs.com
-      - WEBUI_AUTH_TRUSTED_EMAIL_HEADER=X-Forwarded-User
+      # Login
+      - ENABLE_LOGIN_FORM=false
+      - ENABLE_SIGNUP=false
+      - ENABLE_OAUTH_SIGNUP=true
+      - DEFAULT_USER_ROLE=pending
+      # OAuth2
+      - OPENID_PROVIDER_URL=https://accounts.google.com/.well-known/openid-configuration
+      - OAUTH_UPDATE_PICTURE_ON_LOGIN=true
+      # Session
+      - WEBUI_SESSION_COOKIE_SECURE=true
+      - JWT_EXPIRES_IN=1w
+      # Config
+      - ENABLE_WEB_SEARCH=true
+      - WEB_SEARCH_ENGINE=duckduckgo
+      # Persistence
+      - ENABLE_PERSISTENT_CONFIG=false
+      - ENABLE_OAUTH_PERSISTENT_CONFIG=false
     env_file:
-      # Set in .env.secrets:
+      # Sensitive keys in .env.secrets:
+      # - WEBUI_SECRET_KEY
       # - OPENAI_API_KEY
+      # - GOOGLE_CLIENT_ID
+      # - GOOGLE_CLIENT_SECRET
       - .env.secrets
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=oauth
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      
+      # No cache routes
+      - traefik.http.routers.$NAME-no-cache.rule=Host(`$URL`) && PathPrefix(`/api`, `/oauth`, `/callback`, `/login`, `/ws`, `/websocket`)
+      - traefik.http.routers.$NAME-no-cache.middlewares=no-cache
+      
+      # No cache middleware
+      - traefik.http.middlewares.no-cache.headers.customresponseheaders.Cache-Control=no-store, no-cache, must-revalidate
+      - traefik.http.middlewares.no-cache.headers.customresponseheaders.Pragma=no-cache
+      - traefik.http.middlewares.no-cache.headers.customresponseheaders.Expires=0
 networks:
   traefik:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

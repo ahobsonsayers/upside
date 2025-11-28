@@ -1,0 +1,9 @@
+feeds:
+  - name: Tickets For Good
+    url: https://t4g.arranhs.com/london
+    interval: 300
+    ntfy_topic: t4g
+  - name: Met Office 
+    url: https://xkcd.com/rss.xml
+    interval: 300
+    ntfy_topic: xkcd

@@ -1,12 +1,6 @@
-########################################################
-# bazarr
-#
-# Create password:
-# htpasswd -c ~/traefik/auth/.lobechatpasswd arranhs
-########################################################
 services:
   lobechat:
-    container_name: ${NAME}
+    container_name: $NAME
     image: lobehub/lobe-chat:latest
     restart: unless-stopped
     networks:
@@ -17,11 +11,11 @@ services:
       - ACCESS_CODE=-
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
-      - traefik.http.routers.${NAME}.middlewares=oauth
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=oauth
 networks:
   traefik:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL

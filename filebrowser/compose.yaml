@@ -1,9 +1,6 @@
-######################################
-# filebrowser
-######################################
 services:
   filebrowser:
-    container_name: ${NAME}
+    container_name: $NAME
     image: filebrowser/filebrowser:latest
     restart: unless-stopped
     networks:
@@ -11,15 +8,20 @@ services:
     ports:
       - 8090:80
     volumes:
-      - ~:/srv
-      - ~/filebrowser/filebrowser.db:/database.db
+      - ~/filebrowser:/config
+      - ~:/files
+    environment:
+      - FB_PORT=80
+      - FB_CONFIG=/config/config.json
+      - FB_DATABASE=/config/database.db
+      - FB_ROOT=/files
     user: 1000:1000
     labels:
       - traefik.enable=true
-      - traefik.http.routers.${NAME}.rule=Host(`${URL}`)
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
 networks:
   traefik:
     external: true
 x-dockge:
   urls:
-    - https://${URL}
+    - https://$URL
