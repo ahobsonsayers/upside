@@ -28,7 +28,7 @@ services:
       # - KEY
       - .env.secrets
     environment:
-      PORT: 45876
+      - PORT=45876
 networks:
   traefik:
     external: true

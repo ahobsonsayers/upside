@@ -15,14 +15,14 @@ services:
       # - SECRET_KEY_BASE
       - .env.secrets
     environment:
-      SELF_HOSTED: "true"
-      GOOD_JOB_EXECUTION_MODE: async
-      DB_HOST: postgres
-      POSTGRES_DB: maybe
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      RAILS_FORCE_SSL: "false"
-      RAILS_ASSUME_SSL: "false"
+      - SELF_HOSTED=true
+      - GOOD_JOB_EXECUTION_MODE=async
+      - DB_HOST=postgres
+      - POSTGRES_DB=maybe
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - RAILS_FORCE_SSL=false
+      - RAILS_ASSUME_SSL=false
     labels:
       - traefik.enable=true
       - traefik.http.routers.$NAME.rule=Host(`$URL`)
