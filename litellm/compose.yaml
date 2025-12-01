@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     networks:
       - traefik
+      - ollama
     ports:
       - 4000:4000
     volumes:
@@ -14,6 +15,7 @@ services:
       # - LITELLM_MASTER_KEY
       # - LITELLM_SALT_KEY
       # - CEREBRAS_API_KEY
+      # - OLLAMA_API_KEY
       # - GROQ_API_KEY
       # - HUGGINGFACE_API_KEY
       # - OPENROUTER_API_KEY
@@ -26,4 +28,6 @@ services:
       - --config=/app/config.yaml
 networks:
   traefik:
+    external: true
+  ollama:
     external: true

@@ -1,0 +1,15 @@
+services:
+  ollama:
+    container_name: $NAME
+    image: ollama/ollama
+    restart: unless-stopped
+    networks:
+      - ollama
+    ports:
+      - 11434:11434
+    volumes:
+      - ~/ollama:/root/.ollama
+networks:
+  ollama:
+    name: ollama
+    driver: bridge

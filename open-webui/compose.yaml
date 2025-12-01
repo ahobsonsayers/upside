@@ -17,15 +17,14 @@ services:
       - ENABLE_SIGNUP=false
       - ENABLE_OAUTH_SIGNUP=true
       - DEFAULT_USER_ROLE=pending
-      # OAuth2
+      # Auth
       - OPENID_PROVIDER_URL=https://accounts.google.com/.well-known/openid-configuration
       - OAUTH_UPDATE_PICTURE_ON_LOGIN=true
-      # Session
-      - WEBUI_SESSION_COOKIE_SECURE=true
       - JWT_EXPIRES_IN=1w
       # Config
       - ENABLE_WEB_SEARCH=true
       - WEB_SEARCH_ENGINE=duckduckgo
+      - ENABLE_EVALUATION_ARENA_MODELS=false
       # Persistence
       - ENABLE_PERSISTENT_CONFIG=false
       - ENABLE_OAUTH_PERSISTENT_CONFIG=false
@@ -39,15 +38,6 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.$NAME.rule=Host(`$URL`)
-      
-      # No cache routes
-      - traefik.http.routers.$NAME-no-cache.rule=Host(`$URL`) && PathPrefix(`/api`, `/oauth`, `/callback`, `/login`, `/ws`, `/websocket`)
-      - traefik.http.routers.$NAME-no-cache.middlewares=no-cache
-      
-      # No cache middleware
-      - traefik.http.middlewares.no-cache.headers.customresponseheaders.Cache-Control=no-store, no-cache, must-revalidate
-      - traefik.http.middlewares.no-cache.headers.customresponseheaders.Pragma=no-cache
-      - traefik.http.middlewares.no-cache.headers.customresponseheaders.Expires=0
 networks:
   traefik:
     external: true

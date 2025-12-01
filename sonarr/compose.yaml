@@ -19,7 +19,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.$NAME.rule=Host(`$URL`)
       - traefik.http.routers.$NAME.middlewares=$NAME
-      - traefik.http.middlewares.$NAME.basicAuth.usersfile=/auth/.$NAMEpasswd
+      - traefik.http.middlewares.$NAME.basicAuth.usersfile=/auth/.${NAME}passwd
 networks:
   traefik:
     external: true
