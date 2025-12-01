@@ -3,9 +3,19 @@ services:
     container_name: $NAME
     image: arranhs/twitchets:develop
     restart: unless-stopped
-    network_mode: bridge
+    networks:
+      - traefik
+    ports:
+      - 9999:9000
     volumes:
       - ~/twitchets:/twitchets
     environment:
       - DEBUG=true
-networks: {}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$NAME.rule=Host(`$URL`)
+      - traefik.http.routers.$NAME.middlewares=$NAME
+      - traefik.http.middlewares.$NAME.basicAuth.usersfile=/auth/.${NAME}passwd
+networks:
+  traefik:
+    external: true
